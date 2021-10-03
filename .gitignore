@@ -1,0 +1,6 @@
+.idea
+.DS_Store
+scrape-data-manager/tmp
+scrape-data-manager/.DS_Store
+scraper-service/tmp
+scraper-service/.DS_Store

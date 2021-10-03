@@ -1,0 +1,24 @@
+version: "2"
+services:
+  scraper-service:
+    image: poisonfang/scraper-service:v1
+    ports:
+      - 5000:8080
+    command: ./scraper-service
+    depends_on:
+      - scrape-data-manager
+    restart: on-failure
+  scrape-data-manager:
+    image: poisonfang/scrape-data-manager:v1
+    ports:
+      - 5001:8080
+    command: ./scrape-data-manager
+    depends_on:
+      - mongo
+    restart: on-failure
+  mongo:
+    image: mongo:5.0.3
+    ports:
+      - 27017:27017
+    volumes:
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js

@@ -1,0 +1,30 @@
+version: "2"
+services:
+  scrapper-service:
+    image: golang:alpine
+    ports:
+      - 5000:8080
+    volumes:
+      - ./scraper-service:/go/src/github.com/Ayush-Walia/amazon-scraper/scraper-service
+    working_dir: /go/src/github.com/Ayush-Walia/amazon-scraper/scraper-service
+    command: go run main.go
+    depends_on:
+      - scrape-data-manager
+    restart: on-failure
+  scrape-data-manager:
+    image: golang:alpine
+    ports:
+      - 5001:8080
+    volumes:
+      - ./scrape-data-manager:/go/src/github.com/Ayush-Walia/amazon-scraper/scrape-data-manager
+    working_dir: /go/src/github.com/Ayush-Walia/amazon-scraper/scrape-data-manager
+    command: go run main.go
+    depends_on:
+      - mongo
+    restart: on-failure
+  mongo:
+    image: mongo:5.0.3
+    ports:
+      - 27017:27017
+    volumes:
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js
